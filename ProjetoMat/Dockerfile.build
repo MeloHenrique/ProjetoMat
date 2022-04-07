@@ -1,6 +1,6 @@
 ﻿FROM mcr.microsoft.com/dotnet/sdk:6.0
 WORKDIR /app
-COPY ProjetoMat.csproj ProjetoMat.csproj
+COPY ProjetoMat/ProjetoMat.csproj ProjetoMat.csproj
 RUN dotnet restore ProjetoMat.csproj
 COPY . .
 RUN dotnet publish -c Release -o /output --no-restore --nologo

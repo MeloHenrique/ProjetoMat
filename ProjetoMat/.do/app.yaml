@@ -1,0 +1,11 @@
+name: projeto-mat
+static_sites:
+- name: site
+  github:
+    repo: MeloHenrique/ProjetoMat
+    branch: master
+    deploy_on_push: true
+  dockerfile_path: ProjetoMat/Dockerfile.build 
+  output_dir: /output/wwwroot
+  index_document: index.html
+  catchall_document: index.html
