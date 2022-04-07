@@ -1,0 +1,68 @@
+﻿@page "/"
+@using Class;
+@inject IDialogService DialogService
+
+<MudCard>
+	<MudForm Model="@model" @ref="@form" Validation="@(validator.ValidateValue)" ValidationDelay="0">
+		<MudCardContent>
+				<MudTextField @bind-Value="model.primeiroTermo"                              
+							  For="@(() => model.primeiroTermo)"
+							  Immediate="true"
+							  Label="Primeiro Termo" />
+
+				<MudTextField @bind-Value="model.Razao"
+							  For="@(() => model.Razao)"
+							  Immediate="true"
+							  Label="Razão" />
+                              
+				<MudNumericField @bind-Value="model.numerosN"
+							  For="@(() => model.numerosN)"
+							  Immediate="true"
+							  Label="Quantos termos quer calcular?" />
+        </MudCardContent>
+	</MudForm>
+    <MudCardActions>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" OnClick="@(async () => await Submit())">Calcular</MudButton>
+    </MudCardActions>
+</MudCard>
+@code {
+
+    MudForm form;
+    GeometricProgressionModel model = new GeometricProgressionModel();
+    GeometricProgressionValidator validator = new GeometricProgressionValidator();
+
+
+    private async Task Submit()
+    {
+        await form.Validate();
+
+        if (form.IsValid)
+        {
+            var a = Progression.Progreesions.GeometricProgression(Double.Parse(model.primeiroTermo), Double.Parse(model.Razao), model.numerosN);
+
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            var parameters = new DialogParameters();
+
+            string message = $"Os {model.numerosN} termos são: ";
+
+            for (var i = 0; i < model.numerosN; i++)
+            {
+                if(i == model.numerosN)
+                {
+                    message += $"{a[i]} ";
+                }
+                else
+                {
+                    message += $", {a[i]} ";
+                }
+            }
+            
+            parameters.Add("Message", message);
+            
+
+            DialogService.Show<Dialog>("Resultado", parameters, options);
+
+
+        }
+    }
+}
